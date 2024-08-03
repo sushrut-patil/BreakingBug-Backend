@@ -33,7 +33,7 @@ const productSchema = mongoose.Schema(
     },
     quantity: {
       type: Number,
-      default: 45,
+      default: 1,
     },
     reviews: [
       {
@@ -51,6 +51,7 @@ const productSchema = mongoose.Schema(
           type: Date,
           // DATE IS NOT DEFINED WITH DEFAULT VALUES
           // default: Text,
+          default: Date.now,
         },
       },
     ],

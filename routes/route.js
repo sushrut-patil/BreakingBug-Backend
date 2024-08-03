@@ -31,7 +31,8 @@ const {
   customerRegister,
   customerLogIn,
   getCartDetail,
-  cartUpdate,
+  // Changed the method name to more accurate one
+  shippingDataUpdate,
 } = require("../controllers/customerController.js");
 
 const {
@@ -67,7 +68,8 @@ router.put("/deleteAllProductReviews/:id", deleteAllProductReviews);
 router.post("/CustomerRegister", customerRegister);
 router.post("/CustomerLogin", customerLogIn);
 router.get("/getCartDetail/:id", getCartDetail);
-router.put("/CustomerUpdate/:id", cartUpdate);
+// matched the method here
+router.put("/CustomerUpdate/:id", shippingDataUpdate);
 
 // Order
 router.post("/newOrder", newOrder);

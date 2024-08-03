@@ -20,15 +20,16 @@ const customerRegister = async (req, res) => {
         else {
             let result = await customer.save();
             result.password = undefined;
-            
-            const token = createNewToken(result._id)
+            // console.log(result);
+            const token = createNewToken(result._id.toString());
+            console.log(token);
 
             result = {
-                ...result._doc,
+                ...result._doc, 
                 token: token
             };
-
-            res.send(result);
+            // adding the status to the response body
+            res.status(200).send(result);
         }
     } catch (err) {
         res.status(500).json(err);
@@ -38,9 +39,11 @@ const customerRegister = async (req, res) => {
 const customerLogIn = async (req, res) => {
     if (req.body.email && req.body.password) {
         let customer = await Customer.findOne({ email: req.body.email });
-        if (!customer) {
+        // The negation statement here was wrong
+        if (customer) {
             const validated = await bcrypt.compare(req.body.password, customer.password);
-            if (!validated) {
+            // Here also the negation statement is wrong
+            if (validated) {
                 customer.password = undefined;
 
                 const token = createNewToken(customer._id)
@@ -64,9 +67,11 @@ const customerLogIn = async (req, res) => {
 
 const getCartDetail = async (req, res) => {
     try {
-        let customer = await Customer.findBy(req.params.id)
+        // change the method to get id from mongodb
+        const {id}= req.params;
+        let customer = await Customer.findById(id);
         if (customer) {
-            res.get(customer.cartDetails);
+            res.send(customer.cartDetails);
         }
         else {
             res.send({ message: "No customer found" });
@@ -76,13 +81,18 @@ const getCartDetail = async (req, res) => {
     }
 }
 
-const cartUpdate = async (req, res) => {
-    try {
+// changed method name to shippingDataUpdate
 
-        let customer = await Customer.findByIdAndUpdate(req.params.id, req.body,
+const shippingDataUpdate = async (req, res) => {
+    try {
+        // Deleted the non mutable propties from req.body
+        const userBody = req.body;
+        delete userBody._id;
+        let customer = await Customer.findByIdAndUpdate(req.params.id, userBody,
             { new: false })
 
-        return res.send(customer.cartDetails);
+        // Change the method to get shipping data instead of cart data
+        return res.send(customer.shippingData);
 
     } catch (err) {
         res.status(500).json(err);
@@ -93,5 +103,5 @@ module.exports = {
     customerRegister,
     customerLogIn,
     getCartDetail,
-    cartUpdate,
+    shippingDataUpdate,
 };
