@@ -163,7 +163,7 @@ const searchProductbySubCategory = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-
+        
         await Customer.updateMany(
             { "cartDetails._id": deletedProduct._id },
             { $pull: { cartDetails: { _id: deletedProduct._id } } }
@@ -202,7 +202,7 @@ const deleteProducts = async (req, res) => {
 
 const deleteProductReview = async (req, res) => {
     try {
-        const { reviewId } = req.body;
+        const { reviewId } = req.body.id; //Changed req.body.id insted of just req.body
         const productId = req.params.id;
 
         const product = await Product.findById(productId);
@@ -249,8 +249,8 @@ const getInterestedCustomers = async (req, res) => {
                     quantity: cartItem.quantity,
                 };
             }
-            return null; // If cartItem is not found in this customer's cartDetails
-        }).filter(item => item !== null); // Remove null values from the result
+            return null;
+        }).filter(item => item !== null);
 
         if (customerDetails.length > 0) {
             res.send(customerDetails);
@@ -270,17 +270,16 @@ const getAddedToCartProducts = async (req, res) => {
             'cartDetails.seller': sellerId
         });
 
-        const productMap = new Map(); // Use a Map to aggregate products by ID
+        const productMap = new Map();
         customersWithSellerProduct.forEach(customer => {
             customer.cartDetails.forEach(cartItem => {
                 if (cartItem.seller.toString() === sellerId) {
                     const productId = cartItem._id.toString();
                     if (productMap.has(productId)) {
-                        // If product ID already exists, update the quantity
+                        
                         const existingProduct = productMap.get(productId);
                         existingProduct.quantity += cartItem.quantity;
                     } else {
-                        // If product ID does not exist, add it to the Map
                         productMap.set(productId, {
                             productName: cartItem.productName,
                             quantity: cartItem.quantity,

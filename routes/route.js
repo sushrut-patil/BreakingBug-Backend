@@ -16,6 +16,7 @@ const {
   getProducts,
   getProductDetail,
   searchProduct, //Added searchProduct 
+  searchProductbySubCategory, //Added searchProductbySubCategory 
   searchProductbyCategory,
   getSellerProducts,
   updateProduct,
@@ -57,14 +58,14 @@ router.get("/getAddedToCartProducts/:id", getAddedToCartProducts);
 router.put("/ProductUpdate/:id", updateProduct);
 router.put("/addReview/:id", addReview);
 
-router.get("/searchProduct/:key", searchProduct);
+router.get("/searchProduct/:key", searchProduct); //Fixed Proper Method call
 router.get("/searchProductbyCategory/:key", searchProductbyCategory);
-router.get("/searchProductbySubCategory/:key", searchProductbyCategory);
+router.get("/searchProductbySubCategory/:key", searchProductbySubCategory); //Fixed Proper Method call
 
 router.delete("/DeleteProduct/:id", deleteProduct);
 router.delete("/DeleteProducts/:id", deleteProducts);
-router.delete("/deleteProductReview/:id", deleteProductReview);
-router.put("/deleteAllProductReviews/:id", deleteAllProductReviews);
+router.put("/deleteProductReview/:id", deleteProductReview); //Changed method to put from delete
+router.delete("/deleteAllProductReviews/:id", deleteAllProductReviews); //changed method to delete
 
 // Customer
 router.post("/CustomerRegister", customerRegister);
