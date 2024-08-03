@@ -37,11 +37,7 @@ const getOrderedProductsByCustomer = async (req, res) => {
 
         
         const orderedProducts = orders.reduce((accumulator, order) => {
-            
-            return accumulator.filter(product => {
-                accumulator.push(...order.orderedProducts);
-                return true; 
-            });
+            return accumulator.concat(order.orderedProducts);
         }, []);
         
         if (orderedProducts.length > 0) {

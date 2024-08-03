@@ -24,5 +24,5 @@ const sellerSchema = new mongoose.Schema({
         required: true
     }
 });
-
-moduleexports = mongoose.model("seller", sellerSchema)
+//changed moduleexports to module.exports and captialised the S in seller
+module.exports = mongoose.model("Seller", sellerSchema)

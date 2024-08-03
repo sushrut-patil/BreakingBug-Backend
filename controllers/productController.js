@@ -78,7 +78,6 @@ const addReview = async (req, res) => {
         const productId = req.params.id;
 
         const product = await Product.findById(productId);
-
         const existingReview = product.reviews.find(review => review.reviewer.toString() === reviewer);
 
         if (existingReview) {
@@ -89,7 +88,7 @@ const addReview = async (req, res) => {
             rating,
             comment,
             reviewer,
-            date: new Date(),
+            date: Date.now(), //Changed to Date.now() from new Date
         });
 
         const updatedProduct = await product.save();
@@ -111,7 +110,7 @@ const searchProduct = async (req, res) => {
                 { subcategory: { $regex: key, $options: 'i' } }
             ]
         }).populate("seller", "shopName");
-
+        console.log(products);
         if (products.length > 0) {
             res.send(products);
         } else {

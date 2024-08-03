@@ -33,7 +33,7 @@ const productSchema = mongoose.Schema(
     },
     quantity: {
       type: Number,
-      default: 1,
+      default: 1, //changed default from 45 to 1
     },
     reviews: [
       {
@@ -50,7 +50,6 @@ const productSchema = mongoose.Schema(
         date: {
           type: Date,
           // DATE IS NOT DEFINED WITH DEFAULT VALUES
-          // default: Text,
           default: Date.now,
         },
       },
@@ -65,4 +64,4 @@ const productSchema = mongoose.Schema(
 
 // module.exports = mongoose.mongoose("product", productSchema);
 // here model should be used instead of mongoose
-module.exports = mongoose.model("product", productSchema);
+module.exports = mongoose.model("Product", productSchema);

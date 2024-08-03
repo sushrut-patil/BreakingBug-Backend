@@ -48,7 +48,7 @@ const orderSchema = new mongoose.Schema({
         },
       },
       subcategory: {
-        type: mongoose.Schema.Types.ObjectId,
+        subcategory: { type: String },
       },
       productImage: {
         type: String,
@@ -118,4 +118,4 @@ const orderSchema = new mongoose.Schema({
 
 // module.exports = mongoose.model("customer", orderSchema);
 // here the name of model is is incorrect to customer
-module.exports = mongoose.model("order", orderSchema);
+module.exports = mongoose.model("Order", orderSchema);

@@ -15,6 +15,7 @@ const {
   productCreate,
   getProducts,
   getProductDetail,
+  searchProduct, //Added searchProduct 
   searchProductbyCategory,
   getSellerProducts,
   updateProduct,
@@ -38,6 +39,7 @@ const {
 const {
   newOrder,
   getOrderedProductsBySeller,
+  getOrderedProductsByCustomer,
 } = require("../controllers/orderController.js");
 
 // Seller
@@ -55,7 +57,7 @@ router.get("/getAddedToCartProducts/:id", getAddedToCartProducts);
 router.put("/ProductUpdate/:id", updateProduct);
 router.put("/addReview/:id", addReview);
 
-router.get("/searchProduct/:key", searchProductbyCategory);
+router.get("/searchProduct/:key", searchProduct);
 router.get("/searchProductbyCategory/:key", searchProductbyCategory);
 router.get("/searchProductbySubCategory/:key", searchProductbyCategory);
 
@@ -73,7 +75,7 @@ router.put("/CustomerUpdate/:id", shippingDataUpdate);
 
 // Order
 router.post("/newOrder", newOrder);
-router.get("/getOrderedProductsByCustomer/:id", getOrderedProductsBySeller);
+router.get("/getOrderedProductsByCustomer/:id", getOrderedProductsByCustomer);
 router.get("/getOrderedProductsBySeller/:id", getOrderedProductsBySeller);
 
 // there was no export of router
