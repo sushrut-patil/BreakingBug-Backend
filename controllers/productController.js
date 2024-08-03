@@ -110,7 +110,6 @@ const searchProduct = async (req, res) => {
                 { subcategory: { $regex: key, $options: 'i' } }
             ]
         }).populate("seller", "shopName");
-        console.log(products);
         if (products.length > 0) {
             res.send(products);
         } else {
@@ -293,7 +292,6 @@ const getAddedToCartProducts = async (req, res) => {
                 }
             });
         });
-
         const productsInCart = Array.from(productMap.values());
 
         if (productsInCart.length > 0) {

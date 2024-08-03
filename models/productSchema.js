@@ -56,7 +56,8 @@ const productSchema = mongoose.Schema(
     ],
     seller: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "seller",
+      // updated the ref from seller to Seller
+      ref: "Seller",
     },
   },
   { timestamps: false }
