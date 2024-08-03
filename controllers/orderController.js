@@ -10,6 +10,7 @@ const newOrder = async (req, res) => {
             paymentInfo,
             productsQuantity,
             totalPrice,
+            orderStatus = "processing",// added orderstatus
         } = req.body;
 
         const order = await Order.create({
@@ -20,6 +21,7 @@ const newOrder = async (req, res) => {
             paidAt: Date.now(),
             productsQuantity,
             totalPrice,
+            orderStatus,//added orderstatus
         });
 
         return res.send(order);
@@ -35,9 +37,9 @@ const getOrderedProductsByCustomer = async (req, res) => {
     try {
         let orders = await Order.find({ buyer: req.params.id });
 
-        
+        console.log(orders);
         const orderedProducts = orders.reduce((accumulator, order) => {
-            return accumulator.concat(order.orderedProducts);
+            return accumulator.concat(order.orderedProducts)
         }, []);
         
         if (orderedProducts.length > 0) {
@@ -56,27 +58,49 @@ const getOrderedProductsBySeller = async (req, res) => {
         const sellerId = req.params.id;
 
         const ordersWithSellerId = await Order.find({
-            'orderedProducts.sellerId': sellerId
+            'orderedProducts.seller': sellerId
         });
 
-        if (ordersWithSellerId.length > 0) {
-            const orderedProducts = ordersWithSellerId.reduce((accumulator, order) => {
-                order.orderedProducts.forEach(product => {
-                    const existingProductIndex = accumulator.findIndex(p => p._id.toString() === product._id.toString());
-                    if (existingProductIndex !== -1) {
-                        // If product already exists, merge quantities
-                        accumulator[existingProductIndex].quantity += product.quantity;
-                    } else {
-                        // If product doesn't exist, add it to accumulator
-                        accumulator.push(product);
-                    }
-                });
-                return accumulator;
-            }, []);
+        
+        const orderedProducts = ordersWithSellerId.reduce((accumulator, order) => {
+            order.orderedProducts.forEach(product => {
+                const existingProductIndex = accumulator.findIndex(p => p._id.toString() === product._id.toString());
+                if (existingProductIndex !== -1) {
+                    // If product already exists, merge quantities
+                    accumulator[existingProductIndex].quantity += product.quantity;
+                } else {
+                    // If product doesn't exist, add it to accumulator
+                    accumulator.push(product);
+                }
+            });
+            return accumulator;
+        }, []);
+
+        if(orderedProducts.length>0){
             res.send(orderedProducts);
-        } else {
-            res.send({ message: "No products found" });
         }
+        else {
+                res.send({ message: "No products found" });
+            }
+        //pull out orderedProducts from this if condition 
+        // if (orderedProducts.length > 0) {
+        //     const orderedProducts = ordersWithSellerId.reduce((accumulator, order) => {
+        //         order.orderedProducts.forEach(product => {
+        //             const existingProductIndex = accumulator.findIndex(p => p._id.toString() === product._id.toString());
+        //             if (existingProductIndex !== -1) {
+        //                 // If product already exists, merge quantities
+        //                 accumulator[existingProductIndex].quantity += product.quantity;
+        //             } else {
+        //                 // If product doesn't exist, add it to accumulator
+        //                 accumulator.push(product);
+        //             }
+        //         });
+        //         return accumulator;
+        //     }, []);
+        //     res.send(orderedProducts);
+        // } else {
+        //     res.send({ message: "No products found" });
+        // }
     } catch (err) {
         res.status(500).json(err);
     }
